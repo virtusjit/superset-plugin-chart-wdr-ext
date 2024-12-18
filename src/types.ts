@@ -18,8 +18,6 @@
  */
 import {
   QueryFormData,
-  supersetTheme,
-  //QueryMode,
   TimeseriesDataRecord,
 } from '@superset-ui/core';
 import { DataStructure } from "./plugin/transformProps";
@@ -28,7 +26,7 @@ export interface SupersetPluginChartWdrExtStylesProps {
   height: number;
   width: number;
   showToolbar: boolean;
-  headerFontSize: keyof typeof supersetTheme.typography.sizes;
+  //headerFontSize: keyof typeof supersetTheme.typography.sizes;
 }
 
 interface SupersetPluginChartWdrExtCustomizeProps {

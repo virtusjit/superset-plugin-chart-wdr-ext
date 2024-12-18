@@ -67,28 +67,7 @@ const config: ControlPanelConfig = {
             },
           },
         ],
-        [
-          {
-            name: 'header_font_size',
-            config: {
-              type: 'SelectControl',
-              label: t('Font Size'),
-              default: 'xl',
-              choices: [
-                // [value, label]
-                ['xxs', 'xx-small'],
-                ['xs', 'x-small'],
-                ['s', 'small'],
-                ['m', 'medium'],
-                ['l', 'large'],
-                ['xl', 'x-large'],
-                ['xxl', 'xx-large'],
-              ],
-              renderTrigger: true,
-              description: t('The size of your header font'),
-            },
-          },
-        ],
+       
       ],
     },
   ],

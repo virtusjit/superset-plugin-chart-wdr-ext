@@ -1,3 +1,4 @@
+//transformProps.ts
 import { ChartProps, GenericDataType, TimeseriesDataRecord } from '@superset-ui/core';
 
 // Define interfaces for better type safety
@@ -29,7 +30,7 @@ function getTypeString(type: GenericDataType): string {
 export default function transformProps(chartProps: ChartProps) {
 
   const { width, height, formData, queriesData } = chartProps;
-  const { showToolbar, headerText, headerFontSize } = formData;
+  const { showToolbar, headerText} = formData;
   const data = queriesData[0].data as TimeseriesDataRecord[];
   const datatypes = queriesData[0].coltypes as GenericDataType[];
   const columnNames = queriesData[0].colnames as string[];
@@ -53,7 +54,6 @@ export default function transformProps(chartProps: ChartProps) {
     dataHeader,
     // and now your control data, manipulated as needed, and passed through as props!
     showToolbar,
-    headerFontSize,
     headerText,
   };
 }

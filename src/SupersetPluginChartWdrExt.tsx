@@ -1,7 +1,8 @@
+//SupersetPluginChartWdrExt.tsx
 import React, { useEffect, createRef } from 'react';
 //import { styled } from '@superset-ui/core';
 import { SupersetPluginChartWdrExtProps } from './types';
-import { WebDataRocksViewer } from "./components/WebDataRocks/WebDataRocksViewer";
+import { WebDataRocksViewer, WDRConfig } from "./components/WebDataRocks/WebDataRocksViewer";
 import '@webdatarocks/webdatarocks/webdatarocks.css';
 
 
@@ -9,7 +10,11 @@ import '@webdatarocks/webdatarocks/webdatarocks.css';
 export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrExtProps) {
   // height and width are the height and width of the DOM element as it exists in the dashboard.
   // There is also a `data` prop, which is, of course, your DATA 🎉
-  const { dataHeader, data, height, width } = props;
+  const { dataHeader, data, height, width, showToolbar } = props;
+
+  const configWDR: WDRConfig = {
+    showToolbar: showToolbar
+  };
 
   const rootElem = createRef<HTMLDivElement>();
 
@@ -27,7 +32,7 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
       <pre>${JSON.stringify(data, null, 2)}</pre>*/
 
   return (
-    <WebDataRocksViewer />
+    <WebDataRocksViewer data={{data}} header={{dataHeader}} config={configWDR}/>
 
   );
 }

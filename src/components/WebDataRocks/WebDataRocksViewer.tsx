@@ -1,15 +1,19 @@
+//WebDataRocksViewer.tsx
 import * as WebDataRocksReact from "@webdatarocks/react-webdatarocks";
-
 
 import React, { useRef, useCallback } from "react";
 import { myData } from "./data";
+
+export interface WDRConfig {
+  showToolbar: boolean;  
+}; 
 
 // Define the props interface for type safety
 export interface WebDataRocksViewerProps {
     data?: any;
     header?: any;
     report?: any;
-    config?: any;              // Data to be used in template rendering
+    config: WDRConfig;              // Data to be used in template rendering
 };
 
 interface WebDataRocksInstance {
@@ -25,7 +29,7 @@ interface PivotWithWebDataRocks extends WebDataRocksReact.Pivot {
 
 interface PivotConfig {
     toolbar: boolean;
-    beforetoolbarcreated: (toolbar: Toolbar) => void;
+    beforetoolbarcreated?: (toolbar: Toolbar) => void;
     report: typeof myData;
     width: string;
     height: number;
@@ -69,13 +73,13 @@ export const WebDataRocksViewer :React.FC<WebDataRocksViewerProps>= ({
       
       toolbar.getTabs = () => tabs;
     }, []);
-
+    console.log("show toolbar - " + config.showToolbar );
     const pivotConfig: PivotConfig = {
-        toolbar: true,
-        beforetoolbarcreated: customizeToolbar,
-        report: myData,
+        toolbar: config.showToolbar ,
+        report: data,
         width: "100%",
-        height: 500
+        height: 500,
+        ...(config.showToolbar && { beforetoolbarcreated: customizeToolbar })
       };
 
     return (
