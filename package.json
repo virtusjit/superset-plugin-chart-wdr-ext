@@ -1,0 +1,62 @@
+{
+  "name": "superset-plugin-chart-wdr-ext",
+  "version": "0.1.0",
+  "description": "Superset Plugin Chart Wdr Ext",
+  "sideEffects": [
+    "*.css",
+    "@webdatarocks/webdatarocks/webdatarocks.css"
+  ],
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "files": [
+    "esm",
+    "lib"
+  ],
+  "private": true,
+  "scripts": {
+    "build": "npm run build-cjs && npm run build-esm && npm run ts-types && npm run build-css",
+    "build-css": "postcss src/**/*.css --dir esm/ && postcss src/**/*.css --dir lib/",
+    "build-cjs": "babel src --extensions \".ts,.tsx,.js,.jsx\" --copy-files --out-dir lib",
+    "build-clean": "npm run clean && npm run build",
+    "build-esm": "BABEL_OUTPUT=esm babel src --extensions \".ts,.tsx,.js,.jsx\" --copy-files --out-dir esm",
+    "dev": "BABEL_OUTPUT=esm babel src --extensions \".ts,.tsx,.js,.jsx\" --watch --copy-files --out-dir esm",
+    "prebuild": "rimraf {lib,esm,tsconfig.tsbuildinfo}",
+    "ts-types": "tsc --build",
+    "test": "jest"
+  },
+  "author": "My Name",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@airbnb/config-babel": "^2.0.1",
+    "@superset-ui/chart-controls": "*",
+    "@superset-ui/core": "^0.20.2",
+    "react": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@superset-ui/chart-controls": "^0.20.3",
+    "@superset-ui/core": "^0.20.4",
+    "@types/node": "^16.11.7",
+    "autoprefixer": "^10.4.20",
+    "babel-plugin-css-modules-transform": "^1.6.2",
+    "babel-plugin-import-static-files": "^1.0.4",
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.2",
+    "postcss": "^8.4.49",
+    "postcss-loader": "^8.1.1",
+    "rimraf": "^3.0.2",
+    "style-loader": "^4.0.0",
+    "typescript": "^4.1.2"
+  },
+  "dependencies": {
+    "@superset-ui/chart-controls": "*",
+    "@superset-ui/core": "^0.20.2",
+    "@webdatarocks/react-webdatarocks": "^1.4.15",
+    "@webdatarocks/webdatarocks": "^1.4.15",
+    "react": "^16.13.1",
+    "react-dom": "^16.14.0"
+  }
+}
