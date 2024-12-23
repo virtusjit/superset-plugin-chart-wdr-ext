@@ -4,7 +4,8 @@ import React, { useRef, useCallback, useEffect } from "react";
 
 export interface WDRConfig {
   showToolbar: boolean;  
-  //wdrConfig?: string;
+  report_config?: string;
+  onConfigChange?: (config: string) => void;
 }; 
 
 export interface WebDataRocksViewerProps {
@@ -12,6 +13,8 @@ export interface WebDataRocksViewerProps {
     header?: any;
     report?: any;
     config: WDRConfig;
+    height: number;
+    width: number;
 };
 
 interface WebDataRocksInstance {
@@ -30,7 +33,7 @@ interface PivotConfig {
     toolbar: boolean;
     beforetoolbarcreated?: (toolbar: Toolbar) => void;
     report: any;
-    width: string;
+    width: number;
     height: number;
     licenseKey?: string;
     global?: Record<string, unknown>;
@@ -53,10 +56,13 @@ interface Tab {
 export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
     data,
     header,
-    report,
-    config
+    //report,
+    config,
+    height,
+    width
 }: WebDataRocksViewerProps) => {
 
+    
     const pivotRef = useRef<PivotWithWebDataRocks>(null);
 
     const customizeToolbar = useCallback((toolbar: Toolbar) => {
@@ -72,6 +78,7 @@ export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
     const handleReportChange = useCallback(() => {
         if (pivotRef.current) {
             try {
+                console.log("Event report" );
                 const report = pivotRef.current.webdatarocks.getReport();
                 // Сохраняем только настройки отчета
                 const configToSave = {
@@ -80,13 +87,22 @@ export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
                     conditions: report.conditions || [],
                     formats: report.formats || []
                 };
-                console.log('Saving report configuration:', configToSave);
-                localStorage.setItem('wdr_report_config', JSON.stringify(configToSave));
+
+                const configString = JSON.stringify(configToSave, null, 2);
+                if (config.onConfigChange) {
+                    //console.log('Calling onConfigChange with new config');
+                    config.onConfigChange(configString);
+                } else {
+                    console.warn('onConfigChange is not available');
+                }
+
+                //console.log('Saving report configuration:', configToSave);
+                //localStorage.setItem('wdr_report_config', JSON.stringify(configToSave));
             } catch (error) {
                 console.error('Error saving report:', error);
             }
         }
-    }, []);
+    }, [config.onConfigChange]);
 
     useEffect(() => {
       if (pivotRef.current) {
@@ -122,15 +138,27 @@ export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
 
     // Формирование отчета
     const prepareReport = () => {
-        const savedReport = localStorage.getItem('wdr_report_config');
+        //const savedReport = localStorage.getItem('wdr_report_config');
+        const savedReport = config.report_config;
         const savedConfig = savedReport ? JSON.parse(savedReport) : null;
 
         const preparedData = prepareData(data);
-        console.log('Prepared data:', preparedData);
+
+        const mergeData = () => {
+            const result = [
+                        {               
+                            ...header.dataHeader.data
+                        },
+                        ...preparedData
+                    ]
+            return result;
+        };
+        const mergedData = mergeData();
 
         return {
             dataSource: {
-                data: preparedData
+                //data: preparedData
+                data: mergedData
             },
             slice: savedConfig?.slice || {
                 rows: [],
@@ -160,13 +188,12 @@ export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
     };
 
     const initialReport = prepareReport();
-    console.log('Initial report:', initialReport);
 
     const pivotConfig: PivotConfig = {
         toolbar: config.showToolbar,
         report: initialReport,
-        width: "100%",
-        height: 300,
+        width: width,
+        height: height,
         ...(config.showToolbar && { beforetoolbarcreated: customizeToolbar })
     };
 

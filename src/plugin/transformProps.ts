@@ -28,9 +28,9 @@ function getTypeString(type: GenericDataType): string {
 }
 
 export default function transformProps(chartProps: ChartProps) {
-
-  const { width, height, formData, queriesData } = chartProps;
-  const { showToolbar, headerText} = formData;
+  console.log('transformProps input:', chartProps)
+  const { width, height, formData, queriesData, hooks } = chartProps;
+  const { showToolbar , reportJsonConfig  } = formData;
   const data = queriesData[0].data as TimeseriesDataRecord[];
   const datatypes = queriesData[0].coltypes as GenericDataType[];
   const columnNames = queriesData[0].colnames as string[];
@@ -45,8 +45,8 @@ export default function transformProps(chartProps: ChartProps) {
     }, {})
   };
 
-  //console.log('formData via TransformProps.ts', formData);
-  console.log('formData via TransformProps.ts', queriesData);
+  //console.log('dataHeader via TransformProps.ts', dataHeader);
+  //console.log('formData via TransformProps.ts', queriesData);
   return {
     width,
     height,
@@ -54,6 +54,7 @@ export default function transformProps(chartProps: ChartProps) {
     dataHeader,
     // and now your control data, manipulated as needed, and passed through as props!
     showToolbar,
-    headerText,
+    reportJsonConfig,
+    setControlValue: hooks?.setControlValue, // Добавляем setControlValue из hooks
   };
 }

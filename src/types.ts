@@ -1,45 +1,35 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+//types.ts
+
 import {
   QueryFormData,
-  TimeseriesDataRecord,
+  TimeseriesDataRecord
+  
 } from '@superset-ui/core';
+import { ChartProps } from '@superset-ui/core';
 import { DataStructure } from "./plugin/transformProps";
 
 export interface SupersetPluginChartWdrExtStylesProps {
   height: number;
   width: number;
-  showToolbar: boolean;
-  //headerFontSize: keyof typeof supersetTheme.typography.sizes;
 }
 
-interface SupersetPluginChartWdrExtCustomizeProps {
-  headerText: string;
+export interface SupersetPluginChartWdrExtControlValue extends ChartProps {
+  setControlValue?: (name: string, value: any) => void;
+};
+
+// Определяем formData
+export interface WdrExtFormData extends QueryFormData {
+  report_json_config?: string;
 }
 
 export type SupersetPluginChartWdrExtQueryFormData = QueryFormData &
-  SupersetPluginChartWdrExtStylesProps &
-  SupersetPluginChartWdrExtCustomizeProps;
+  SupersetPluginChartWdrExtStylesProps ;
 
-export type SupersetPluginChartWdrExtProps = SupersetPluginChartWdrExtStylesProps &
-  SupersetPluginChartWdrExtCustomizeProps & {
+export type SupersetPluginChartWdrExtProps = SupersetPluginChartWdrExtStylesProps & {
+    showToolbar: boolean;
     data: TimeseriesDataRecord[];
     dataHeader: DataStructure[];
+    reportJsonConfig?: string;
+    setControlValue?: (name: string, value: any) => void;
     // add typing here for the props you pass in from transformProps.ts!
   };
