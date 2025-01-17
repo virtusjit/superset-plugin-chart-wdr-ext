@@ -57,6 +57,13 @@ to import the plugin and later add the following to the array that's passed to t
 ```js
 new SupersetPluginChartWdrExt().configure({ key: 'superset-plugin-chart-wdr-ext' }),
 ```
+add to webpack.config.js
+
+{
+      test: /\.css$/,
+      include: /node_modules\/@webdatarocks/, // только css из @webdatarocks
+      use: ['style-loader', 'css-loader']
+      },
 
 After that the plugin should show up when you run Superset, e.g. the development server:
 
