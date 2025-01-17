@@ -28,7 +28,7 @@ function getTypeString(type: GenericDataType): string {
 }
 
 export default function transformProps(chartProps: ChartProps) {
-  console.log('transformProps input:', chartProps)
+  //console.log('transformProps input:', chartProps)
   const { width, height, formData, queriesData, hooks, emitCrossFilters,filterState } = chartProps;
   const { showToolbar , reportJsonConfig ,theme } = formData;
   const data = queriesData[0].data as TimeseriesDataRecord[];

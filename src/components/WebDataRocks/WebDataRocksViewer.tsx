@@ -200,7 +200,9 @@ export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
             ];
             return result;
         };
+        
         const mergedData = mergeData();
+        
 
         return {
             dataSource: {
@@ -259,5 +261,6 @@ export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
         ...(config.showToolbar && { beforetoolbarcreated: customizeToolbar }),
     };
 
+    console.log("pivotConfig ",pivotConfig);
     return <WebDataRocksReact.Pivot ref={pivotRef} {...pivotConfig} />;
 };
