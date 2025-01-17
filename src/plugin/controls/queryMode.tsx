@@ -17,16 +17,26 @@
  * under the License.
  */
 import {
-  buildQueryContext,
-  normalizeOrderBy,
-  QueryFormData,
-} from '@superset-ui/core';
+  ControlConfig,
+  ControlSetItem,
+  QueryModeLabel,
+} from '@superset-ui/chart-controls';
+import { QueryMode, t } from '@superset-ui/core';
+import { getQueryMode } from './shared';
 
-export default function buildQuery(formData: QueryFormData) {
-  return buildQueryContext(formData, baseQueryObject => [
-    {
-      ...baseQueryObject,
-      orderby: normalizeOrderBy(baseQueryObject).orderby,
-    },
-  ]);
-}
+const queryMode: ControlConfig<'RadioButtonControl'> = {
+  type: 'RadioButtonControl',
+  label: t('Query mode'),
+  default: null,
+  options: [
+    [QueryMode.Aggregate, QueryModeLabel[QueryMode.Aggregate]],
+    [QueryMode.Raw, QueryModeLabel[QueryMode.Raw]],
+  ],
+  mapStateToProps: ({ controls }) => ({ value: getQueryMode(controls) }),
+  rerender: ['all_columns', 'groupby', 'metrics', 'percent_metrics'],
+};
+
+export const queryModeControlSetItem: ControlSetItem = {
+  name: 'query_mode',
+  config: queryMode,
+};

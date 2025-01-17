@@ -17,16 +17,23 @@
  * under the License.
  */
 import {
-  buildQueryContext,
-  normalizeOrderBy,
-  QueryFormData,
-} from '@superset-ui/core';
+  ControlPanelsContainerProps,
+  ControlSetItem,
+} from '@superset-ui/chart-controls';
+import { isAggMode } from './shared';
 
-export default function buildQuery(formData: QueryFormData) {
-  return buildQueryContext(formData, baseQueryObject => [
-    {
-      ...baseQueryObject,
-      orderby: normalizeOrderBy(baseQueryObject).orderby,
-    },
-  ]);
-}
+export const rowLimitControlSetItem: ControlSetItem = {
+  name: 'row_limit',
+  override: {
+    visibility: ({ controls }: ControlPanelsContainerProps) =>
+      !controls?.server_pagination?.value,
+  },
+};
+
+export const timeSeriesLimitMetricControlSetItem: ControlSetItem = {
+  name: 'timeseries_limit_metric',
+  override: {
+    visibility: isAggMode,
+    resetOnHide: false,
+  },
+};

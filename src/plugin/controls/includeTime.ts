@@ -16,17 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
-  buildQueryContext,
-  normalizeOrderBy,
-  QueryFormData,
-} from '@superset-ui/core';
+import { ControlSetItem } from '@superset-ui/chart-controls';
+import { t } from '@superset-ui/core';
+import { isAggMode } from './shared';
 
-export default function buildQuery(formData: QueryFormData) {
-  return buildQueryContext(formData, baseQueryObject => [
-    {
-      ...baseQueryObject,
-      orderby: normalizeOrderBy(baseQueryObject).orderby,
-    },
-  ]);
-}
+export const includeTimeControlSetItem: ControlSetItem = {
+  name: 'include_time',
+  config: {
+    type: 'CheckboxControl',
+    label: t('Include time'),
+    description: t(
+      'Whether to include the time granularity as defined in the time section',
+    ),
+    default: false,
+    visibility: isAggMode,
+    resetOnHide: false,
+  },
+};

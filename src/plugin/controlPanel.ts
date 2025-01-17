@@ -1,9 +1,42 @@
 import { t, validateNonEmpty } from '@superset-ui/core';
 import {
-  ControlPanelConfig
+  ControlPanelConfig,
+  getStandardizedControls,
 } from '@superset-ui/chart-controls';
 
+import { includeTimeControlSetItem } from './controls/includeTime';
+import {
+  rowLimitControlSetItem,
+  timeSeriesLimitMetricControlSetItem,
+} from './controls/limits';
+import {
+  metricsControlSetItem,
+  percentMetricsControlSetItem,
+  showTotalsControlSetItem,
+} from './controls/metrics';
+import {
+  orderByControlSetItem,
+  orderDescendingControlSetItem,
+} from './controls/orderBy';
+import {
+  serverPageLengthControlSetItem,
+  serverPaginationControlSetRow,
+} from './controls/pagination';
+import { queryModeControlSetItem } from './controls/queryMode';
+import { allColumnsControlSetItem } from './controls/columns';
+import { groupByControlSetItem } from './controls/groupBy';
 
+
+const themes = [
+  ['classic', 'Classic'],
+  ['dark', 'Dark'],
+  ['green', 'Green'],
+  ['lightblue', 'Light Blue'],
+  ['orange', 'Orange'],
+  ['stripedblue', 'Striped Blue'],
+  ['stripedteal', 'Striped Teal'],
+  ['teal', 'Teal']
+];
 
 const config: ControlPanelConfig = {
 
@@ -14,11 +47,18 @@ const config: ControlPanelConfig = {
     {
       label: t('Query'),
       expanded: true,
-      tabOverride: "data",
       controlSetRows: [
-        ['columns'],
+        [queryModeControlSetItem],
+        [groupByControlSetItem],
+        [metricsControlSetItem, allColumnsControlSetItem],
+        [percentMetricsControlSetItem],
+        [timeSeriesLimitMetricControlSetItem, orderByControlSetItem],
+        [orderDescendingControlSetItem],
+        serverPaginationControlSetRow,
+        [rowLimitControlSetItem, serverPageLengthControlSetItem],
+        [includeTimeControlSetItem],
+        [showTotalsControlSetItem],
         ['adhoc_filters'],
-        ['row_limit'],
       ],
     },
     {
@@ -35,6 +75,20 @@ const config: ControlPanelConfig = {
               renderTrigger: true,
               default: true,
               description: t('Show WDR toolbar'),
+            },
+          },
+        ],
+        [
+          {
+            name: 'theme',
+            config: {
+              type: 'SelectControl',
+              label: t('Theme'),
+              default: 'stripedteal',
+              choices: themes,
+              hidden: true,
+              renderTrigger: true,
+              description: t('Select WebDataRocks theme'),
             },
           },
         ],
@@ -64,6 +118,10 @@ const config: ControlPanelConfig = {
       description: t('Choose a target'),
     },
   },
+  formDataOverrides: formData => ({
+    ...formData,
+    metrics: getStandardizedControls().popAllMetrics(),
+  }),
 };
 
 export default config;

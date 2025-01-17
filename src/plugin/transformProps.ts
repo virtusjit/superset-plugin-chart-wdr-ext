@@ -29,11 +29,13 @@ function getTypeString(type: GenericDataType): string {
 
 export default function transformProps(chartProps: ChartProps) {
   console.log('transformProps input:', chartProps)
-  const { width, height, formData, queriesData, hooks } = chartProps;
-  const { showToolbar , reportJsonConfig  } = formData;
+  const { width, height, formData, queriesData, hooks, emitCrossFilters,filterState } = chartProps;
+  const { showToolbar , reportJsonConfig ,theme } = formData;
   const data = queriesData[0].data as TimeseriesDataRecord[];
   const datatypes = queriesData[0].coltypes as GenericDataType[];
   const columnNames = queriesData[0].colnames as string[];
+   // Получаем хуки для управления маской данных и контекстным меню
+   const { setDataMask = () => {} } = hooks;
 
   // Create the desired structure
   const dataHeader: DataStructure = {
@@ -55,6 +57,10 @@ export default function transformProps(chartProps: ChartProps) {
     // and now your control data, manipulated as needed, and passed through as props!
     showToolbar,
     reportJsonConfig,
+    selectedValues: filterState.selectedValues || [],
+    theme,
     setControlValue: hooks?.setControlValue, // Добавляем setControlValue из hooks
+    emitCrossFilters,
+    setDataMask,
   };
 }

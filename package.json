@@ -12,7 +12,6 @@
     "esm",
     "lib"
   ],
-  "private": true,
   "scripts": {
     "build": "npm run build-cjs && npm run build-esm && npm run ts-types && npm run build-css",
     "build-css": "postcss src/**/*.css --dir esm/ && postcss src/**/*.css --dir lib/",
@@ -58,5 +57,13 @@
     "@webdatarocks/webdatarocks": "^1.4.15",
     "react": "^16.13.1",
     "react-dom": "^16.14.0"
-  }
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "keywords": [
+    "superset"
+  ],
+  "types": "./lib/index.d.ts"
 }
