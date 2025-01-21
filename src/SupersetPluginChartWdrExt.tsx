@@ -4,6 +4,7 @@ import React, { useEffect,  useCallback } from 'react';
 import { SupersetPluginChartWdrExtProps, Cell  } from './types';
 import { WebDataRocksViewer, WDRConfig } from "./components/WebDataRocks/WebDataRocksViewer";
 import '@webdatarocks/webdatarocks/webdatarocks.css';
+//import './webdatarocks.min.css';
 //import { extractTreePathInfo } from './constants';
 
 
@@ -13,7 +14,7 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
   // height and width are the height and width of the DOM element as it exists in the dashboard.
   // There is also a `data` prop, which is, of course, your DATA 🎉☝
 
-  const { dataHeader, data, height, width, showToolbar, setControlValue, reportJsonConfig ='', theme, emitCrossFilters, setDataMask/*, selectedValues*/ } = props;
+  const { dataHeader, data, height, width, showToolbar, setControlValue, reportJsonConfig ='',  emitCrossFilters, setDataMask/*, selectedValues*/ } = props;
    
   
   //const rootElem = createRef<HTMLDivElement>();
@@ -85,7 +86,7 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
   }, [setControlValue]);
 
   const handleCellClick = useCallback((cell: Cell) => {
-    console.log('handleCellClick called with:', cell);
+    //console.log('handleCellClick called with:', cell);
     /*setDataMask({
       extraFormData: {
         filters: [
@@ -110,14 +111,14 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
     onCellClick: handleCellClick,
   };
 
- useEffect(() => {
+ /*useEffect(() => {
     console.log('Component mounted with props:', props);
     //console.log('Current report config:', reportJsonConfig);
     //console.log('Current configWDR:', configWDR);
-  }, [props]);
+  }, [props]);*/
 
   return (
-    <WebDataRocksViewer key={theme} data={{data}} header={{dataHeader}} config={configWDR} height={height} width={width}/>
+    <WebDataRocksViewer key={JSON.stringify(dataHeader)+configWDR.showToolbar.toString()+height.toString()+width.toString() } data={{data}} header={{dataHeader}} config={configWDR} height={height} width={width}/>
 
   );
 }

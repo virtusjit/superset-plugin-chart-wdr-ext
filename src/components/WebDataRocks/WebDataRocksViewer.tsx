@@ -21,6 +21,7 @@ export interface WebDataRocksViewerProps {
 interface WebDataRocksInstance {
     expandAllData: () => void;
     collapseAllData: () => void;
+    setReport: (report: any) => void;
     getReport: () => any;
     on: (eventName: string, callback: any) => void;
     off: (eventName: string, callback: any) => void;
@@ -262,5 +263,5 @@ export const WebDataRocksViewer: React.FC<WebDataRocksViewerProps> = ({
     };
 
     console.log("pivotConfig ",pivotConfig);
-    return <WebDataRocksReact.Pivot ref={pivotRef} {...pivotConfig} />;
+    return <WebDataRocksReact.Pivot  ref={pivotRef} {...pivotConfig} />;
 };
