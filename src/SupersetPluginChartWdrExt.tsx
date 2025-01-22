@@ -1,5 +1,5 @@
 //SupersetPluginChartWdrExt.tsx
-import React, { useEffect,  useCallback } from 'react';
+import React, { useEffect, useState,  useCallback } from 'react';
 //import { styled } from '@superset-ui/core';
 import { SupersetPluginChartWdrExtProps, Cell  } from './types';
 import { WebDataRocksViewer, WDRConfig } from "./components/WebDataRocks/WebDataRocksViewer";
@@ -14,7 +14,7 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
   // height and width are the height and width of the DOM element as it exists in the dashboard.
   // There is also a `data` prop, which is, of course, your DATA 🎉☝
 
-  const { dataHeader, data, height, width, showToolbar, setControlValue, reportJsonConfig ='',  emitCrossFilters, setDataMask/*, selectedValues*/ } = props;
+  const {  dataHeader, data, height, width, showToolbar, setControlValue, reportJsonConfig ='',  emitCrossFilters, setDataMask/*, selectedValues*/ } = props;
    
   
   //const rootElem = createRef<HTMLDivElement>();
@@ -69,6 +69,9 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
     [groupby, labelMap, selectedValues],
   );*/
 
+  // Создаем уникальный ID для каждого экземпляра WDR
+  const [wdrInstanceId] = useState(() => `wdr-${Math.random().toString(36).substring(2, 9)}`);
+  
   // Создаем callback для обновления значения контрола
   const handleConfigChange = useCallback((newConfig: string) => {
     //console.log('handleConfigChange called with:', newConfig);
@@ -86,7 +89,24 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
   }, [setControlValue]);
 
   const handleCellClick = useCallback((cell: Cell) => {
-    //console.log('handleCellClick called with:', cell);
+    console.log('handleCellClick called with:', cell);
+    console.log('WDR instance:', wdrInstanceId);
+    // Находим контейнер WDR
+    const wdrElement = document.querySelector(`[data-wdr-instance="${wdrInstanceId}"]`);
+    if (wdrElement) {
+      // Поднимаемся вверх по DOM до элемента с id="chart-id-XXX"
+      const chartContainer = wdrElement.closest('[id^="chart-id-"]');
+      if (chartContainer) {
+        const chartId = chartContainer.id.replace('chart-id-', '');
+        
+        // Получаем ID дашборда из URL
+        const dashboardMatch = window.location.pathname.match(/\/dashboard\/(\d+)/);
+        const dashboardId = dashboardMatch ? dashboardMatch[1] : null;
+
+        console.log('Clicked in chart:', chartId);
+        console.log('Dashboard ID:', dashboardId);
+      }
+    }
     /*setDataMask({
       extraFormData: {
         filters: [
@@ -102,7 +122,7 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
         selectedValues: ['product_line.Classic Cars']
       }
      });*/
-  }, [emitCrossFilters, setDataMask]);
+  }, [wdrInstanceId]);
 
   const configWDR: WDRConfig = {
     showToolbar: showToolbar,
@@ -118,7 +138,20 @@ export default function SupersetPluginChartWdrExt(props: SupersetPluginChartWdrE
   }, [props]);*/
 
   return (
-    <WebDataRocksViewer key={JSON.stringify(dataHeader)+configWDR.showToolbar.toString()+height.toString()+width.toString() } data={{data}} header={{dataHeader}} config={configWDR} height={height} width={width}/>
-
+    <div className="wdr-container">
+      {/* Добавляем скрытый div с информацией о чарте */}
+      <div 
+        className="wdr-chart-info" 
+        style={{ display: 'none' }} 
+        data-wdr-instance={wdrInstanceId}
+      />
+    <WebDataRocksViewer 
+    key={JSON.stringify(dataHeader)+configWDR.showToolbar.toString()+height.toString()+width.toString() }
+    data={{data}} 
+    header={{dataHeader}} 
+    config={configWDR} 
+    height={height} 
+    width={width}/>
+     </div>
   );
 }
